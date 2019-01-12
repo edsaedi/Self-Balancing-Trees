@@ -13,6 +13,7 @@ namespace Self_Balancing_Trees
         public AVLNode<T> Right;
         public AVLNode<T> Left;
         public int Height;
+
         public int Balance
         {
             get
@@ -74,19 +75,17 @@ namespace Self_Balancing_Trees
             }
         }
 
-
-
-
-
         public AVLNode(T value)
         {
             Value = value;
+            Height = 1;
         }
 
         public AVLNode(T value, AVLNode<T> parent)
         {
             Value = value;
             Parent = parent;
+            Height = 1;
         }
     }
 
@@ -181,7 +180,7 @@ namespace Self_Balancing_Trees
             }
 
             pivot.Left = node;
-            node.Parent = node;
+            node.Parent = pivot;
 
             node.Right = child;
             child.Parent = node;
@@ -215,12 +214,74 @@ namespace Self_Balancing_Trees
         public void Add(T value)
         {
             Count++;
-
-            if (root != null)
+            if (root == null)
             {
                 root = new AVLNode<T>(value);
                 return;
             }
+            var curr = root;
+            while (curr != null)
+            {
+                if (value.CompareTo(curr.Value) < 0)
+                {
+                    if (curr.Left == null)
+                    {
+                        //add the new child
+                        curr.Left = new AVLNode<T>(value, curr);
+                        break;
+                    }
+
+                    curr = curr.Left;
+                }
+                else
+                {
+                    if (curr.Right == null)
+                    {
+                        curr.Right = new AVLNode<T>(value, curr);
+                        break;
+                    }
+
+                    curr = curr.Right;
+                }
+            }
+
+            Fixup(curr);
+        }
+
+        private void Fixup(AVLNode<T> node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            //Update Height
+            int left = node.Left == null ? 0 : node.Left.Height;
+            int right = node.Right == null ? 0 : node.Right.Height;
+            node.Height = Math.Max(left, right) + 1;
+
+            if (node.Balance > 1) //right heavy
+            {
+                if (node.Right.Balance < 0) //weight on right
+                {
+                    RotateRight(node.Right);
+                }
+
+                RotateLeft(node);
+            }
+            else if (node.Balance < -1) //left heavy
+            {
+                if (node.Left.Balance > 0) //weight on left
+                {
+                    RotateLeft(node.Left);
+                }
+
+                RotateRight(node);
+            }
+
+
+
+            Fixup(node.Parent);
         }
     }
 }
