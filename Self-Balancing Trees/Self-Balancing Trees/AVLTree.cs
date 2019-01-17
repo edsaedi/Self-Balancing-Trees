@@ -245,7 +245,68 @@ namespace Self_Balancing_Trees
                 }
             }
 
+
             Fixup(curr);
+        }
+
+        public bool Remove(T value)
+        {
+            var toRemove = Find(value);
+            if (toRemove == null)
+            {
+                return false;
+            }
+
+            Remove(toRemove);
+            Count--;
+            return true;
+        }
+
+        private void Remove(AVLNode<T> del)
+        {
+            if (del.ChildCount == 0)
+            {
+                if (del.IsLeftChild)
+                {
+                    del.Parent.Left = null;
+                }
+                else if (del.IsRightChild)
+                {
+                    del.Parent.Right = null;
+                }
+                else
+                {
+                    root = null;
+                }
+
+                Fixup(del.Parent);
+            }
+            else if (del.ChildCount == 1)
+            {
+                if (del.IsLeftChild)
+                {
+                    del.Parent.Left = del.First;
+                    del.First.Parent = del.Parent;
+                }
+                else if (del.IsRightChild)
+                {
+                    del.Parent.Right = del.First;
+                    del.First.Parent = del.Parent;
+                }
+                else
+                {
+                    root = del.First;
+                    root.Parent = null;
+                }
+
+                Fixup(del.Parent);
+            }
+            else if (del.ChildCount == 2)
+            {
+                AVLNode<T> curr = Maximum(del.Left);
+                del.Value = curr.Value;
+                Remove(curr);
+            }
         }
 
         private void Fixup(AVLNode<T> node)
@@ -278,8 +339,6 @@ namespace Self_Balancing_Trees
 
                 RotateRight(node);
             }
-
-
 
             Fixup(node.Parent);
         }
