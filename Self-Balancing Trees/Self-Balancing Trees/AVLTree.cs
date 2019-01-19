@@ -92,7 +92,7 @@ namespace Self_Balancing_Trees
     public class AVLTree<T> where T : IComparable<T>
     {
         public int Count { get; private set; }
-        internal AVLNode<T> root;
+        public AVLNode<T> root;
 
         public AVLTree()
         {
@@ -109,7 +109,7 @@ namespace Self_Balancing_Trees
             return false;
         }
 
-        internal AVLNode<T> Find(T value)
+        public AVLNode<T> Find(T value)
         {
             AVLNode<T> curr = root;
             while (curr != null)

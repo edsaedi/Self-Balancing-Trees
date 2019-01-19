@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Self-Balancing Trees", "Self-Balancing Trees\Self-Balancing Trees.csproj", "{7583950E-03BB-44BC-9514-982173E8D9EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVL Test", "AVL Test\AVL Test.csproj", "{32C1783B-6927-49D1-ADF6-2CA446AC9F44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7583950E-03BB-44BC-9514-982173E8D9EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7583950E-03BB-44BC-9514-982173E8D9EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7583950E-03BB-44BC-9514-982173E8D9EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32C1783B-6927-49D1-ADF6-2CA446AC9F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C1783B-6927-49D1-ADF6-2CA446AC9F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C1783B-6927-49D1-ADF6-2CA446AC9F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C1783B-6927-49D1-ADF6-2CA446AC9F44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
