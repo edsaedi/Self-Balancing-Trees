@@ -28,7 +28,7 @@ namespace Self_Balancing_Trees
         {
             get
             {
-                if (Parent != null && Parent.Left != this && Parent.Left != null)
+                if (Parent != null && Parent.Left == this)
                 {
                     return true;
                 }
@@ -40,7 +40,7 @@ namespace Self_Balancing_Trees
         {
             get
             {
-                if (Parent != null && Parent.Right != this && Parent.Right != null)
+                if (Parent != null && Parent.Right == this)
                 {
                     return true;
                 }
@@ -118,11 +118,11 @@ namespace Self_Balancing_Trees
                 {
                     return curr;
                 }
-                else if (curr.Value.CompareTo(value) < 0)
+                else if (value.CompareTo(curr.Value) < 0)
                 {
                     curr = curr.Left;
                 }
-                else if (curr.Value.CompareTo(value) > 0)
+                else if (value.CompareTo(curr.Value) > 0)
                 {
                     curr = curr.Right;
                 }
@@ -178,12 +178,23 @@ namespace Self_Balancing_Trees
             {
                 parent.Right = pivot;
             }
+            else
+            {
+                root = pivot;
+            }
 
             pivot.Left = node;
+            pivot.Parent = parent;
             node.Parent = pivot;
 
             node.Right = child;
-            child.Parent = node;
+            if (child != null)
+            {
+                child.Parent = node;
+            }
+
+            UpdateHeight(node);
+            UpdateHeight(pivot);
         }
 
         public void RotateRight(AVLNode<T> node)
@@ -201,14 +212,25 @@ namespace Self_Balancing_Trees
             {
                 parent.Right = pivot;
             }
+            else
+            {
+                root = pivot;
+            }
 
             //Rotate
             pivot.Right = node;
+            pivot.Parent = parent;
             node.Parent = pivot;
 
             //Pass Child
             node.Left = child;
-            child.Parent = node;
+            if (child != null)
+            {
+                child.Parent = node;
+            }
+
+            UpdateHeight(node);
+            UpdateHeight(pivot);
         }
 
         public void Add(T value)
@@ -233,7 +255,7 @@ namespace Self_Balancing_Trees
 
                     curr = curr.Left;
                 }
-                else
+                else if (value.CompareTo(curr.Value) > 0)
                 {
                     if (curr.Right == null)
                     {
@@ -242,6 +264,10 @@ namespace Self_Balancing_Trees
                     }
 
                     curr = curr.Right;
+                }
+                else
+                {
+                    throw new ArgumentException("No duplicate values allowed");
                 }
             }
 
@@ -316,10 +342,7 @@ namespace Self_Balancing_Trees
                 return;
             }
 
-            //Update Height
-            int left = node.Left == null ? 0 : node.Left.Height;
-            int right = node.Right == null ? 0 : node.Right.Height;
-            node.Height = Math.Max(left, right) + 1;
+            UpdateHeight(node);
 
             if (node.Balance > 1) //right heavy
             {
@@ -342,5 +365,14 @@ namespace Self_Balancing_Trees
 
             Fixup(node.Parent);
         }
+
+        private void UpdateHeight(AVLNode<T> node)
+        {
+            //Update Height
+            int left = node.Left == null ? 0 : node.Left.Height;
+            int right = node.Right == null ? 0 : node.Right.Height;
+            node.Height = Math.Max(left, right) + 1;
+        }
+
     }
 }

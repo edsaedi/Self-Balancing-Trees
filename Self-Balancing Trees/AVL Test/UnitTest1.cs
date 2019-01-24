@@ -7,7 +7,7 @@ namespace AVL_Test
 {
     public class UnitTest1
     {
-        Random rand = new Random();
+        Random rand = new Random(42);
 
         public int[] Randomize(int size)
         {
@@ -34,7 +34,7 @@ namespace AVL_Test
             return array;
         }
 
-        public AVLTree<int> CrateTree(int size)
+        public AVLTree<int> CreateTree(int size)
         {
             return CreateTree(Randomize(size));
         }
@@ -73,16 +73,36 @@ namespace AVL_Test
         public void Find()
         {
             int size = 100;
-            for (int i = 0; i < size; i++)
-            {
-                int[] array = UniqueRandomization(size);
-                var tree = CreateTree(array);
+            int[] array = UniqueRandomization(size);
+            var tree = CreateTree(array);
 
-                for (int j = 0; j < array.Length; j++)
-                {
-                    Assert.True(array[j] == tree.Find(array[j]).Value);
-                }
+            for (int j = 0; j < array.Length; j++)
+            {
+                Assert.True(array[j] == tree.Find(array[j]).Value);
             }
+        }
+
+        [Fact]
+        public void Add()
+        {
+            int size = 100;
+            CheckTree(CreateTree(UniqueRandomization(size)), size);
+        }
+
+        [Fact]
+        public void Remove()
+        {
+            int size = 100;
+            //Create Tree
+            int[] array = UniqueRandomization(size);
+            var tree = CreateTree(array);
+            //Find Index to Remove
+            int index = rand.Next(0, size + 1);
+            //Remove from tree
+            tree.Remove(array[index]);
+            //Check Tree
+            Assert.False(tree.Contains(array[index]));
+            CheckTree(tree, size - 1);
         }
     }
 }

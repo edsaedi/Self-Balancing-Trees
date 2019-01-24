@@ -14,7 +14,6 @@ namespace Self_Balancing_Trees
     {
         public static void Main(string[] args)
         {
-
         }
     }
 }
