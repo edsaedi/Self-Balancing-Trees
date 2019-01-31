@@ -5,38 +5,13 @@ using Xunit;
 
 namespace AVL_Test
 {
-    public class UnitTest1
+    public class AVL_Parents
     {
         Random rand = new Random(42);
 
-        public int[] Randomize(int size)
-        {
-            int[] array = new int[size];
-            for (int i = 0; i < size; i++)
-            {
-                array[i] = rand.Next(0, size + 1);
-            }
-            return array;
-        }
-
-        public int[] UniqueRandomization(int size)
-        {
-            int[] array = new int[size];
-            for (int i = 0; i < size; i++)
-            {
-                int temp = rand.Next(0, size * 2);
-                while (array.Contains(temp))
-                {
-                    temp = rand.Next(0, size * 2);
-                }
-                array[i] = temp;
-            }
-            return array;
-        }
-
         public AVLTree<int> CreateTree(int size)
         {
-            return CreateTree(Randomize(size));
+            return CreateTree(Helper.Randomize(size, rand));
         }
 
         public AVLTree<int> CreateTree(int[] size)
@@ -73,7 +48,7 @@ namespace AVL_Test
         public void Find()
         {
             int size = 100;
-            int[] array = UniqueRandomization(size);
+            int[] array = Helper.UniqueRandomization(size, rand);
             var tree = CreateTree(array);
 
             for (int j = 0; j < array.Length; j++)
@@ -86,7 +61,7 @@ namespace AVL_Test
         public void Add()
         {
             int size = 100;
-            CheckTree(CreateTree(UniqueRandomization(size)), size);
+            CheckTree(CreateTree(Helper.UniqueRandomization(size, rand)), size);
         }
 
         [Fact]
@@ -94,7 +69,7 @@ namespace AVL_Test
         {
             int size = 100;
             //Create Tree
-            int[] array = UniqueRandomization(size);
+            int[] array = Helper.UniqueRandomization(size, rand);
             var tree = CreateTree(array);
             //Find Index to Remove
             int index = rand.Next(0, size + 1);
