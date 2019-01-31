@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Self_Balancing_Trees;
+using AVL_With_Parents;
 using Xunit;
 
 namespace AVL_Test

@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Self-Balancing Trees\Self-Balancing Trees.csproj" />
+    <ProjectReference Include="..\Self-Balancing Trees\AVL_With_Parents.csproj" />
   </ItemGroup>
 
 </Project>

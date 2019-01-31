@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Self-Balancing Trees", "Self-Balancing Trees\Self-Balancing Trees.csproj", "{7583950E-03BB-44BC-9514-982173E8D9EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVL_With_Parents", "AVL_With_Parents\AVL_With_Parents.csproj", "{7583950E-03BB-44BC-9514-982173E8D9EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVL Test", "AVL Test\AVL Test.csproj", "{32C1783B-6927-49D1-ADF6-2CA446AC9F44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AVL Test", "AVL Test\AVL Test.csproj", "{32C1783B-6927-49D1-ADF6-2CA446AC9F44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
