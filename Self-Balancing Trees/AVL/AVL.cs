@@ -6,68 +6,36 @@ using System.Threading.Tasks;
 
 namespace AVL
 {
-    class AVL<T> where T : IComparable<T>
+    public class AVL<T> where T : IComparable<T>
     {
-        //Root
-        Node<T> Root;
-        //Count = 0
-
-        //Add(T value) <- calls the recursive one
-        //InternalAdd(Node node, T Value) <- recursive
-
-        /*
-            EscapeCase: if the given node is null
-
-            PreRecursion: go down the tree
-
-            RecursiveCall: InternalAdd
-
-            
-
-        */
+        Node<T> Root = null;
+        public int Count { get; private set; } = 0;
 
         public void Add(T value)
         {
-            Add(Root, value);
+            Root = Add(Root, value);
+            Count++;
         }
 
-        private void Add(Node<T> node, T value)
+        private Node<T> Add(Node<T> node, T value)
         {
-            //code here will run as we go DOWN the tree
-
-            if (Root == null)
+            if (node == null)
             {
-                Root = new Node<T>(value);
-                return;
+                return new Node<T>(value);
             }
 
             if (value.CompareTo(node.Value) < 0)
             {
-                if (node.Left == null)
-                {
-                    node.Left = new Node<T>(value);
-                }
-                else
-                {
-                    Add(node.Left, value);
-                }
+                node.Left = Add(node.Left, value);
             }
             else //if (value.CompareTo(node.Value) >= 0)
             {
-                if (node.Right == null)
-                {
-                    node.Right = new Node<T>(value);
-                }
-                else
-                {
-                    Add(node.Right, value);
-                }
+                node.Right = Add(node.Right, value);
             }
 
-            Fixup(node);
+            node = Fixup(node);
 
-            //code here will run as we go UP the tree
-            //Balance the current node
+            return node;
         }
 
         private void UpdateHeight(Node<T> node)
@@ -87,32 +55,45 @@ namespace AVL
                 if (node.Right.Balance < 0)
                 {
                     //Rotate Right on right child
-                    RotateRight(node.Right);
+                    node.Right = RotateRight(node.Right);
                 }
 
-                RotateLeft(node);
+                node = RotateLeft(node);
             }
             else if (node.Balance < -1)
             {
                 if (node.Left.Balance > 0)
                 {
                     //Rotate left on left child
-                    RotateLeft(node.Left);
+                    node.Left = RotateLeft(node.Left);
                 }
 
-                RotateRight(node);
+                node = RotateRight(node);
             }
-            return null;
+
+            return node;
         }
 
         private Node<T> RotateRight(Node<T> node)
         {
-            return null;
+            var pivot = node.Left;
+            var child = pivot.Right;
+
+            pivot.Right = node;
+            node.Left = child;
+
+            return pivot;
         }
 
         private Node<T> RotateLeft(Node<T> node)
         {
-            return null;
+            var pivot = node.Right;
+            var child = pivot.Left;
+
+            pivot.Left = node;
+            node.Right = child;
+
+            return pivot;
         }
     }
 }

@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AVL\AVL.csproj" />
     <ProjectReference Include="..\AVL_With_Parents\AVL_With_Parents.csproj" />
   </ItemGroup>
 
