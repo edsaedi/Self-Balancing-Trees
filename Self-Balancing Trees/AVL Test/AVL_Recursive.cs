@@ -25,22 +25,32 @@ namespace AVL_Test
             return tree;
         }
 
-        internal void CheckNode(Node)
+        internal void CheckNode(AVL<int>.Node node)
+        {
+            Assert.True(node.Balance <= 1 && node.Balance >= -1);
+            if (node.Left != null)
+            {
+                Assert.True(node.Left.CompareTo(node) < 0);
+                CheckNode(node.Left);
+            }
+            if (node.Right != null)
+            {
+                Assert.True(node.Right.CompareTo(node) >= 0);
+                CheckNode(node.Right);
+            }
+        }
 
         internal void CheckTree(AVL<int> tree, int size)
         {
-
+            CheckNode(tree.Root);
+            Assert.True(size == tree.Count);
         }
 
         [Fact]
         public void Add()
         {
             int size = 100;
-            int[] array = Helper.UniqueRandomization(size, rand);
-
-            //every node should have a balance between -1 & 1
-            //the count of the tree should be correct
-
+            CheckTree(CreateTree(Helper.UniqueRandomization(size, rand)), size);
         }
     }
 }

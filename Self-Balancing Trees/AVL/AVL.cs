@@ -8,7 +8,36 @@ namespace AVL
 {
     public class AVL<T> where T : IComparable<T>
     {
-        Node<T> Root = null;
+        internal class Node : IComparable<Node>
+        {
+            public T Value { get; set; }
+            public Node Left { get; set; }
+            public Node Right { get; set; }
+            public int Height { get; set; }
+            public int Balance
+            {
+                get
+                {
+                    int right = Right == null ? 0 : Right.Height;
+                    int left = Left == null ? 0 : Left.Height;
+                    return right - left;
+                }
+            }
+
+            public Node(T value)
+            {
+                Value = value;
+                Height = 1;
+            }
+
+            public int CompareTo(Node other)
+            {
+                return Value.CompareTo(other.Value);
+            }
+        }
+
+
+        internal Node Root = null;
         public int Count { get; private set; } = 0;
 
         public void Add(T value)
@@ -17,11 +46,11 @@ namespace AVL
             Count++;
         }
 
-        private Node<T> Add(Node<T> node, T value)
+        private Node Add(Node node, T value)
         {
             if (node == null)
             {
-                return new Node<T>(value);
+                return new Node(value);
             }
 
             if (value.CompareTo(node.Value) < 0)
@@ -38,14 +67,14 @@ namespace AVL
             return node;
         }
 
-        private void UpdateHeight(Node<T> node)
+        private void UpdateHeight(Node node)
         {
             int left = (node.Left == null ? 0 : node.Left.Height);
             int right = node.Right == null ? 0 : node.Right.Height;
             node.Height = Math.Max(left, right) + 1;
         }
 
-        private Node<T> Fixup(Node<T> node)
+        private Node Fixup(Node node)
         {
             //Update Height of current node
             UpdateHeight(node);
@@ -74,7 +103,7 @@ namespace AVL
             return node;
         }
 
-        private Node<T> RotateRight(Node<T> node)
+        private Node RotateRight(Node node)
         {
             var pivot = node.Left;
             var child = pivot.Right;
@@ -85,7 +114,7 @@ namespace AVL
             return pivot;
         }
 
-        private Node<T> RotateLeft(Node<T> node)
+        private Node RotateLeft(Node node)
         {
             var pivot = node.Right;
             var child = pivot.Left;
