@@ -49,7 +49,7 @@ namespace AVL_Test
         [Fact]
         public void Add()
         {
-            int size = 100;
+            int size = 7;
             CheckTree(CreateTree(Helper.UniqueRandomization(size, rand)), size);
         }
     }

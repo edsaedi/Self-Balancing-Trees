@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AVL
 {
+    //TODO: Fix the Add
     public class AVL<T> where T : IComparable<T>
     {
         internal class Node : IComparable<Node>
@@ -14,6 +15,7 @@ namespace AVL
             public Node Left { get; set; }
             public Node Right { get; set; }
             public int Height { get; set; }
+
             public int Balance
             {
                 get
@@ -35,7 +37,6 @@ namespace AVL
                 return Value.CompareTo(other.Value);
             }
         }
-
 
         internal Node Root = null;
         public int Count { get; private set; } = 0;
@@ -106,10 +107,9 @@ namespace AVL
         private Node RotateRight(Node node)
         {
             var pivot = node.Left;
-            var child = pivot.Right;
 
+            node.Left = pivot.Right;
             pivot.Right = node;
-            node.Left = child;
 
             return pivot;
         }
@@ -117,10 +117,9 @@ namespace AVL
         private Node RotateLeft(Node node)
         {
             var pivot = node.Right;
-            var child = pivot.Left;
 
+            node.Right = pivot.Left;
             pivot.Left = node;
-            node.Right = child;
 
             return pivot;
         }
