@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,35 @@ namespace AVL
             {
                 return Value.CompareTo(other.Value);
             }
+
+            public void PrintPretty(string indent, bool last)
+            {
+
+                Debug.Write(indent);
+                if (last)
+                {
+                    Debug.Write("└─");
+                    indent += "  ";
+                }
+                else
+                {
+                    Debug.Write("├─");
+                    indent += "| ";
+                }
+                Debug.WriteLine(Value);
+
+                var children = new List<Node>();
+                if (this.Left != null)
+                    children.Add(this.Left);
+                if (this.Right != null)
+                    children.Add(this.Right);
+
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].PrintPretty(indent, i == children.Count - 1);
+                }
+
+            }
         }
 
         internal Node Root = null;
@@ -66,6 +96,45 @@ namespace AVL
             node = Fixup(node);
 
             return node;
+        }
+
+        public bool Remove(T value)
+        {
+            //search for a node
+            int oldCount = Count;
+            Root = Remove(Root, value);
+            return oldCount != Count;
+        }
+
+        private Node Remove(Node node, T value)
+        {
+            //Count--; when you remove the node
+        }
+
+        internal Node Find(T value)
+        {
+            Node curr = Root;
+            while (curr != null)
+            {
+                if (curr.Value.CompareTo(value) == 0)
+                {
+                    return curr;
+                }
+                else if (value.CompareTo(curr.Value) < 0)
+                {
+                    curr = curr.Left;
+                }
+                else if (value.CompareTo(curr.Value) > 0)
+                {
+                    curr = curr.Right;
+                }
+            }
+            return null;
+        }
+
+        public bool Contains(T value)
+        {
+            return Find(value) != null; //code re-use
         }
 
         private void UpdateHeight(Node node)
@@ -111,6 +180,9 @@ namespace AVL
             node.Left = pivot.Right;
             pivot.Right = node;
 
+            UpdateHeight(node);
+            UpdateHeight(pivot);
+
             return pivot;
         }
 
@@ -121,7 +193,15 @@ namespace AVL
             node.Right = pivot.Left;
             pivot.Left = node;
 
+            UpdateHeight(node);
+            UpdateHeight(pivot);
+
             return pivot;
+        }
+
+        public void Print()
+        {
+            Root.PrintPretty("", true);
         }
     }
 }

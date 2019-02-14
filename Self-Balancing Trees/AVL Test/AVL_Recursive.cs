@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using AVL;
+using System.Diagnostics;
 
 namespace AVL_Test
 {
@@ -22,6 +23,7 @@ namespace AVL_Test
             {
                 tree.Add(size[i]);
             }
+
             return tree;
         }
 
@@ -49,8 +51,44 @@ namespace AVL_Test
         [Fact]
         public void Add()
         {
-            int size = 7;
+            int size = 100;
             CheckTree(CreateTree(Helper.UniqueRandomization(size, rand)), size);
+        }
+
+        [Fact]
+        public void Find()
+        {
+            int size = 100;
+            int[] array = Helper.UniqueRandomization(size, rand);
+            var tree = CreateTree(array);
+            for (int i = 0; i < array.Length; i++)
+            {
+                Assert.True(array[i] == (tree.Find(array[i]).Value));
+            }
+        }
+
+        [Fact]
+        public void Contains()
+        {
+            int size = 100;
+            int[] array = Helper.UniqueRandomization(size, rand);
+            var tree = CreateTree(array);
+            for (int i = 0; i < array.Length; i++)
+            {
+                Assert.True(tree.Contains(array[i]));
+            }
+        }
+
+        [Fact]
+        public void Remove()
+        {
+            int size = 100;
+            int[] array = Helper.UniqueRandomization(size, rand);
+            var tree = CreateTree(array);
+            int index = rand.Next(0, array.Length);
+            tree.Remove(index);
+            CheckTree(tree, size - 1);
+            Assert.False(tree.Contains(array[index]));
         }
     }
 }
