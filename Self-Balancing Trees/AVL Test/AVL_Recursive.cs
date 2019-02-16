@@ -86,7 +86,8 @@ namespace AVL_Test
             int[] array = Helper.UniqueRandomization(size, rand);
             var tree = CreateTree(array);
             int index = rand.Next(0, array.Length);
-            tree.Remove(index);
+            Assert.True(tree.Remove(array[index]));
+            Assert.False(tree.Remove(-1));
             CheckTree(tree, size - 1);
             Assert.False(tree.Contains(array[index]));
         }

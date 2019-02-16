@@ -16,6 +16,40 @@ namespace AVL
             public Node Left { get; set; }
             public Node Right { get; set; }
             public int Height { get; set; }
+            public Node First
+            {
+                get
+                {
+                    if (this.Left != null)
+                    {
+                        return this.Left;
+                    }
+                    if (this.Right != null)
+                    {
+                        return this.Right;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            public int ChildCount
+            {
+                get
+                {
+                    int count = 0;
+                    if (Left != null)
+                    {
+                        count++;
+                    }
+                    if (Right != null)
+                    {
+                        count++;
+                    }
+                    return count;
+                }
+            }
 
             public int Balance
             {
@@ -108,7 +142,60 @@ namespace AVL
 
         private Node Remove(Node node, T value)
         {
-            //Count--; when you remove the node
+            if(node == null)
+            {
+                return null;
+            }
+
+            if (value.CompareTo(node.Value) < 0)
+            {
+                node.Left = Remove(node.Left, value);
+            }
+            else if (value.CompareTo(node.Value) > 0)
+            {
+                node.Right = Remove(node.Right, value);
+            }
+            else
+            {
+                Count--;
+                if (node.ChildCount == 0)
+                {
+                    return null;
+                }
+                else if (node.ChildCount == 1)
+                {
+                    return node.First;
+                }
+                else
+                {
+                    Node candidate = Maximum(node.Left);
+                    node.Value = candidate.Value;
+                    node.Left = Remove(node.Left, candidate.Value);
+                    //if left child exists, call fixup on left child
+                }
+            }
+
+            return Fixup(node);
+        }
+
+        internal Node Minimum(Node node)
+        {
+            var temp = node;
+            while (temp.Right != null)
+            {
+                temp = temp.Right;
+            }
+            return temp;
+        }
+
+        internal Node Maximum(Node node)
+        {
+            var temp = node;
+            while (temp.Left != null)
+            {
+                temp = temp.Left;
+            }
+            return temp;
         }
 
         internal Node Find(T value)
