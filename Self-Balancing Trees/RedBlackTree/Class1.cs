@@ -11,56 +11,14 @@ namespace RedBlackTree
             public T Value { get; set; }
             public Node Left { get; set; }
             public Node Right { get; set; }
-            public int Height { get; set; }
-            public Node First
-            {
-                get
-                {
-                    if (Left != null)
-                    {
-                        return Left;
-                    }
-                    if (Right != null)
-                    {
-                        return Right;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-            public int ChildCount
-            {
-                get
-                {
-                    int count = 0;
-                    if (Left != null)
-                    {
-                        count++;
-                    }
-                    if (Right != null)
-                    {
-                        count++;
-                    }
-                    return count;
-                }
-            }
-
-            public int Balance
-            {
-                get
-                {
-                    int right = Right == null ? 0 : Right.Height;
-                    int left = Left == null ? 0 : Left.Height;
-                    return right - left;
-                }
-            }
+            public bool IsBlack { get; set; }
 
             public Node(T value)
             {
                 Value = value;
-                Height = 1;
+                Left = null;
+                Right = null;
+                IsBlack = false;
             }
 
             public int CompareTo(Node other)
@@ -106,14 +64,39 @@ namespace RedBlackTree
         internal Node Root { get; private set; } = null;
         public int Count { get; private set; } = 0;
 
-        //public RedBlackTree()
-        //{
+        public RedBlackTree()
+        {
+            Count = 0;
+            Root = null;
+        }
 
-        //}
+        internal bool IsRed(Node node)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+
+            return !node.IsBlack;
+        }
+
+        private void FlipColor(Node node)
+        {
+            node.IsBlack = !node.IsBlack;
+            node.Left.IsBlack = !node.Left.IsBlack;
+            node.Right.IsBlack = !node.Right.IsBlack;
+        }
+
+        public void Clear()
+        {
+            Count = 0;
+            Root = null;
+        }
 
         public void Add(T value)
         {
             Add(Root, value);
+            Root.IsBlack = true;
             Count++;
         }
 
@@ -128,12 +111,42 @@ namespace RedBlackTree
             {
                 Add(node.Left, value);
             }
-            else
+            else if (value.CompareTo(node.Value) > 0)
             {
                 Add(node.Right, value);
             }
+            else
+            {
+                throw new ArgumentException("An entry with the same value exists!");
+            }
+
+            if (IsRed(node.Left) && IsRed(node.Right))
+            {
+                FlipColor(node);
+            }
+
+            if (IsRed(node.Right))
+            {
+                RotateLeft(node);
+            }
+
+            if (IsRed(node.Left) && IsRed(node.Left.Left))
+            {
+                //RotateRight(node);
+            }
 
             return node;
+        }
+
+        internal Node RotateLeft(Node node)
+        {
+            Node temp = node.Right;
+            return node;
+        }
+
+        public void Print()
+        {
+            Root.PrintPretty("", true);
         }
     }
 }
