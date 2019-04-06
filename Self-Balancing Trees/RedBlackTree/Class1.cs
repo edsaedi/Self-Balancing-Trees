@@ -138,9 +138,97 @@ namespace RedBlackTree
             return node;
         }
 
+        public bool Remove(T value)
+        {
+            int initialCount = Count;
+            if (Root != null)
+            {
+                Root = Remove(Root, value);
+                if (Root != null)
+                {
+                    Root.IsBlack = true;
+                }
+            }
+
+            return initialCount == Count - 1 ? true : false;
+        }
+
+        internal Node Remove(Node node, T value)
+        {
+            if (value.CompareTo(node.Value) < 0)
+            {
+                if (node.Left != null)
+                {
+                    if (!IsRed(node.Left) && !IsRed(node.Left.Left))
+                    {
+                        node = MoveRedLeft(node);
+                    }
+
+                    node.Left = Remove(node.Left, value);
+                }
+            }
+            else
+            {
+
+            }
+
+            return node;
+
+        }
+
         internal Node RotateLeft(Node node)
         {
+            //Node rotation
             Node temp = node.Right;
+            node.Right = temp.Left;
+            temp.Left = node;
+
+            //Color rotation
+            temp.IsBlack = node.IsBlack;
+            node.IsBlack = false;
+            return node;
+        }
+
+        internal Node RotateRight(Node node)
+        {
+            //Node rotation
+            Node temp = node.Left;
+            node.Left = temp.Right;
+            temp.Right = node;
+
+            //Color rotation
+            temp.IsBlack = node.IsBlack;
+            node.IsBlack = false;
+            return node;
+        }
+
+        internal Node MoveRedLeft(Node node)
+        {
+            FlipColor(node);
+            if (IsRed(node.Right.Left))
+            {
+                node.Right = RotateRight(node.Right);
+                node = RotateLeft(node);
+
+                FlipColor(node);
+
+                if (IsRed(node.Right.Right))
+                {
+                    node.Right = RotateLeft(node.Right);
+                }
+            }
+            return node;
+        }
+
+        internal Node MoveRedRight(Node node)
+        {
+            FlipColor(node);
+            if (IsRed(node.Left.Left))
+            {
+                node = RotateRight(node);
+                FlipColor(node);
+            }
+
             return node;
         }
 
