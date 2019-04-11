@@ -83,8 +83,8 @@ namespace RedBlackTree
         private void FlipColor(Node node)
         {
             node.IsBlack = !node.IsBlack;
-            node.Left.IsBlack = !node.Left.IsBlack;
             node.Right.IsBlack = !node.Right.IsBlack;
+            node.Left.IsBlack = !node.Left.IsBlack;
         }
 
         public void Clear()
