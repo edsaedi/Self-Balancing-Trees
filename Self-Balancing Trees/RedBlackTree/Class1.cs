@@ -138,7 +138,7 @@ namespace RedBlackTree
             return node;
         }
 
-        public bool Remove(T value)
+        /*public bool Remove(T value)
         {
             int initialCount = Count;
             if (Root != null)
@@ -174,7 +174,7 @@ namespace RedBlackTree
 
             return node;
 
-        }
+        }*/
 
         internal Node RotateLeft(Node node)
         {
