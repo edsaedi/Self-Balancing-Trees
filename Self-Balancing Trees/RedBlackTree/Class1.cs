@@ -21,6 +21,40 @@ namespace RedBlackTree
                 IsBlack = false;
             }
 
+            public int ChildCount
+            {
+                get
+                {
+                    int count = 0;
+                    if (Left != null)
+                    {
+                        count++;
+                    }
+                    if (Right != null)
+                    {
+                        count++;
+                    }
+                    return count;
+                }
+            }
+
+            public Node First
+            {
+                get
+                {
+                    Node first = null;
+                    if (Left != null)
+                    {
+                        first = Left;
+                    }
+                    else if (Right != null)
+                    {
+                        first = Right;
+                    }
+                    return first;
+                }
+            }
+
             public int CompareTo(Node other)
             {
                 return Value.CompareTo(other.Value);
@@ -132,13 +166,13 @@ namespace RedBlackTree
 
             if (IsRed(node.Left) && IsRed(node.Left.Left))
             {
-                //RotateRight(node);
+                RotateRight(node);
             }
 
             return node;
         }
 
-        /*public bool Remove(T value)
+        public bool Remove(T value)
         {
             int initialCount = Count;
             if (Root != null)
@@ -157,24 +191,34 @@ namespace RedBlackTree
         {
             if (value.CompareTo(node.Value) < 0)
             {
-                if (node.Left != null)
-                {
-                    if (!IsRed(node.Left) && !IsRed(node.Left.Left))
-                    {
-                        node = MoveRedLeft(node);
-                    }
-
-                    node.Left = Remove(node.Left, value);
-                }
+                Remove(node.Left, value);
+            }
+            else if (value.CompareTo(node.Value) > 0)
+            {
+                Remove(node.Right, value);
             }
             else
             {
+                Count--;
+                if (node.ChildCount == 0)
+                {
+                    return null;
+                }
 
+                else if (node.ChildCount == 1)
+                {
+                    return node.First;
+                }
+                else
+                {
+                    Node canidate = Maximum(node);
+                    node.Value = canidate.Value;
+                    node.Left = Remove(node.Left, canidate.Value);
+                }
             }
-
             return node;
 
-        }*/
+        }
 
         internal Node RotateLeft(Node node)
         {
@@ -202,31 +246,40 @@ namespace RedBlackTree
             return node;
         }
 
-        internal Node MoveRedLeft(Node node)
+        internal Node Maximum(Node node)
         {
-            FlipColor(node);
-            if (IsRed(node.Right.Left))
+            var temp = node.Right;
+            while (temp.Left != null)
             {
-                node.Right = RotateRight(node.Right);
-                node = RotateLeft(node);
-
-                FlipColor(node);
-
-                if (IsRed(node.Right.Right))
-                {
-                    node.Right = RotateLeft(node.Right);
-                }
+                temp = temp.Left;
             }
-            return node;
+            return null;
         }
 
         internal Node MoveRedRight(Node node)
         {
             FlipColor(node);
+
             if (IsRed(node.Left.Left))
             {
                 node = RotateRight(node);
                 FlipColor(node);
+            }
+
+            return node;
+        }
+
+        internal Node MoveRedLeft(Node node)
+        {
+            FlipColor(node);
+
+            if (IsRed(node.Right))
+            {
+                if (IsRed(node.Left))
+                {
+                    node.Right = RotateRight(node.Right);
+                    node = RotateLeft(node);
+                }
             }
 
             return node;
