@@ -141,6 +141,11 @@ namespace RedBlackTree
                 return new Node(value);
             }
 
+            if (IsRed(node.Left) && IsRed(node.Right))
+            {
+                FlipColor(node);
+            }
+
             if (value.CompareTo(node.Value) < 0)
             {
                 Add(node.Left, value);
@@ -154,19 +159,14 @@ namespace RedBlackTree
                 throw new ArgumentException("An entry with the same value exists!");
             }
 
-            if (IsRed(node.Left) && IsRed(node.Right))
-            {
-                FlipColor(node);
-            }
-
             if (IsRed(node.Right))
             {
-                RotateLeft(node);
+                node = RotateLeft(node);
             }
 
             if (IsRed(node.Left) && IsRed(node.Left.Left))
             {
-                RotateRight(node);
+                node = RotateRight(node);
             }
 
             return node;
@@ -191,9 +191,58 @@ namespace RedBlackTree
         {
             if (value.CompareTo(node.Value) < 0)
             {
+                if (!IsRed(node.Left) && !IsRed(node.Left.Left))
+                {
+                    MoveRedLeft(node);
+                }
                 Remove(node.Left, value);
             }
-            else if (value.CompareTo(node.Value) > 0)
+
+            else
+            {
+                if (IsRed(node.Right))
+                {
+                    node = RotateRight(node);
+                }
+
+                if (value.CompareTo(node.Value) == 0)
+                {
+                    if (node.ChildCount == 0)
+                    {
+                        return null;
+                    }
+
+                    else
+                    {
+                        if (value.CompareTo(node.Value) > 0)
+                        {
+                            //if(IsRed(node.Left)???)
+                        }
+                        else
+                        {
+                        }
+                    }
+                }
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            if (value.CompareTo(node.Value) > 0)
             {
                 Remove(node.Right, value);
             }
@@ -211,9 +260,9 @@ namespace RedBlackTree
                 }
                 else
                 {
-                    Node canidate = Maximum(node);
+                    Node canidate = Minimum(node.Right);
                     node.Value = canidate.Value;
-                    node.Left = Remove(node.Left, canidate.Value);
+                    node.Right = Remove(node.Right, canidate.Value);
                 }
             }
             return node;
@@ -246,9 +295,9 @@ namespace RedBlackTree
             return node;
         }
 
-        internal Node Maximum(Node node)
+        internal Node Minimum(Node node)
         {
-            var temp = node.Right;
+            var temp = node;
             while (temp.Left != null)
             {
                 temp = temp.Left;
@@ -259,13 +308,11 @@ namespace RedBlackTree
         internal Node MoveRedRight(Node node)
         {
             FlipColor(node);
-
             if (IsRed(node.Left.Left))
             {
                 node = RotateRight(node);
                 FlipColor(node);
             }
-
             return node;
         }
 
@@ -273,12 +320,47 @@ namespace RedBlackTree
         {
             FlipColor(node);
 
+            if (IsRed(node.Right.Left))
+            {
+                node.Right = RotateRight(node.Right);
+                node = RotateLeft(node);
+
+                FlipColor(node);
+
+                if (IsRed(node.Right.Right))
+                {
+                    node.Right = RotateLeft(node.Right);
+                }
+
+            }
+
+            return node;
+        }
+
+        internal Node Fixup(Node node)
+        {
             if (IsRed(node.Right))
             {
+                node = RotateLeft(node);
+            }
+
+            if (IsRed(node.Left) && IsRed(node.Left.Left))
+            {
+                node = RotateRight(node);
+            }
+
+            if (IsRed(node.Left) && IsRed(node.Right))
+            {
+                FlipColor(node);
+            }
+
+            if ((node.Left != null) && IsRed(node.Left.Right) && !IsRed(node.Left.Left))
+            {
+                node.Left = RotateLeft(node.Left);
+
                 if (IsRed(node.Left))
                 {
-                    node.Right = RotateRight(node.Right);
-                    node = RotateLeft(node);
+                    node = RotateRight(node);
                 }
             }
 
