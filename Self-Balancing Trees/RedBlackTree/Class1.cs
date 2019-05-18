@@ -191,82 +191,48 @@ namespace RedBlackTree
         {
             if (value.CompareTo(node.Value) < 0)
             {
-                if (!IsRed(node.Left) && !IsRed(node.Left.Left))
+                if (node.Left != null)
                 {
-                    MoveRedLeft(node);
+                    if (!IsRed(node.Left) && !IsRed(node.Left.Left))
+                    {
+                        MoveRedLeft(node);
+                    }
+                    node.Left = Remove(node.Left, value);
                 }
-                Remove(node.Left, value);
             }
-
             else
             {
-                if (IsRed(node.Right))
+                if (IsRed(node.Left))
                 {
                     node = RotateRight(node);
                 }
 
-                if (value.CompareTo(node.Value) == 0)
+                if (value.CompareTo(node.Value) == 0 && node.Right != null)
                 {
-                    if (node.ChildCount == 0)
-                    {
-                        return null;
-                    }
-
-                    else
-                    {
-                        if (value.CompareTo(node.Value) > 0)
-                        {
-                            //if(IsRed(node.Left)???)
-                        }
-                        else
-                        {
-                        }
-                    }
-                }
-
-
-
-
-
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-            if (value.CompareTo(node.Value) > 0)
-            {
-                Remove(node.Right, value);
-            }
-            else
-            {
-                Count--;
-                if (node.ChildCount == 0)
-                {
+                    Count--;
                     return null;
                 }
 
-                else if (node.ChildCount == 1)
+                if (node.Right != null)
                 {
-                    return node.First;
-                }
-                else
-                {
-                    Node canidate = Minimum(node.Right);
-                    node.Value = canidate.Value;
-                    node.Right = Remove(node.Right, canidate.Value);
+                    if (!IsRed(node.Right) && !IsRed(node.Right.Left))
+                    {
+                        node = MoveRedRight(node);
+                    }
+                    if (value.CompareTo(node.Value) == 0)
+                    {
+                        Node min = Minimum(node.Right);
+                        node.Value = min.Value;
+                        node.Right = Remove(node.Right, min.Value);
+                    }
+                    else
+                    {
+                        node.Right = Remove(node.Right, value);
+                    }
                 }
             }
-            return node;
 
+            return Fixup(node);
         }
 
         internal Node RotateLeft(Node node)
@@ -370,6 +336,46 @@ namespace RedBlackTree
         public void Print()
         {
             Root.PrintPretty("", true);
+        }
+
+        /// <summary>
+        /// This was from github
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="condition"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        internal IEnumerable<T> Traverse(Node node, Func<Node, bool> condition, Func<Node, T> selector)
+        {
+            // Create a stack to avoid recursion
+            Stack<Node> stack = new Stack<Node>();
+            Node current = node;
+            while (null != current)
+            {
+                if (null != current.Left)
+                {
+                    // Save current state and go left
+                    stack.Push(current);
+                    current = current.Left;
+                }
+                else
+                {
+                    do
+                    {
+                        // Select current node if relevant
+                        if (condition(current))
+                        {
+                            yield return selector(current);
+                        }
+
+                        // Go right - or up if nothing to the right
+                        current = current.Right;
+                    }
+                    while ((null == current) &&
+                           (0 < stack.Count) &&
+                           (null != (current = stack.Pop())));
+                }
+            }
         }
     }
 }
