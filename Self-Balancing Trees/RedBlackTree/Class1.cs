@@ -129,7 +129,7 @@ namespace RedBlackTree
 
         public void Add(T value)
         {
-            Add(Root, value);
+            Root = Add(Root, value);
             Root.IsBlack = true;
             Count++;
         }

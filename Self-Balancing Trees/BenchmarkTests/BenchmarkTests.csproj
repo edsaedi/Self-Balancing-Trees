@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AVL\AVL.csproj" />
+    <ProjectReference Include="..\RedBlackTree\RedBlackTree.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BenchmarkRunner">
+      <HintPath>..\..\..\BenchmarkRunner\BenchmarkRunner\bin\Release\netcoreapp3.1\BenchmarkRunner.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
